@@ -8,56 +8,11 @@
     />
 
     <!-- This is our database of messages -->
-    <!-- <script src="./post-store"></script> -->
-
+    <script src="https://xss-game.appspot.com/static/post-store.js"></script>
     <script>
       /*
        * Objects to implement a client-side post database.
        */
-
-      function Post(message) {
-        this.message = message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        this.date = new Date().getTime();
-      }
-
-      function PostDB(defaultMessage) {
-        // Initial message to display to users
-        this._defaultMessage = defaultMessage || "";
-
-        this.setup = function () {
-          var defaultPost = new Post(defaultMessage);
-          window.localStorage["postDB"] = JSON.stringify({
-            posts: [defaultPost],
-          });
-        };
-
-        this.save = function (message, callback) {
-          var newPost = new Post(message);
-          var allPosts = this.getPosts();
-          allPosts.push(newPost);
-          window.localStorage["postDB"] = JSON.stringify({
-            posts: allPosts,
-          });
-
-          callback();
-          return false;
-        };
-
-        this.clear = function (callback) {
-          this.setup();
-
-          callback();
-          return false;
-        };
-
-        this.getPosts = function () {
-          return JSON.parse(window.localStorage["postDB"]).posts;
-        };
-
-        if (!window.localStorage["postDB"]) {
-          this.setup();
-        }
-      }
       var defaultMessage =
         "Welcome!<br><br>This is your <i>personal</i>" +
         " stream. You can post anything you want here, especially " +
@@ -93,7 +48,12 @@
         };
 
         document.getElementById("post-form").onsubmit = function () {
-          var message = document.getElementById("post-content").value;
+          let message = document
+            .getElementById("post-content")
+            .value.replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&#x22;")
+            .replace(/'/g, "&#x27;");
           DB.save(message, function () {
             displayPosts();
           });

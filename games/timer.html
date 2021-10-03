@@ -8,7 +8,9 @@
     />
 
     <script>
-      function startTimer(seconds) {
+      function startTimer() {
+        let url = new URL(window.location.href);
+        let seconds = url.searchParams.get("timer");
         seconds = parseInt(seconds) || 3;
         setTimeout(function () {
           window.confirm("Time is up!");
@@ -22,9 +24,18 @@
     <br />
     <img
       src="https://xss-game.appspot.com/static/loading.gif"
-      onload="startTimer('{{ timer }}');"
+      onload="startTimer();"
     />
     <br />
-    <div id="message">Your timer will execute in {{ timer }} seconds.</div>
+    <div id="message">
+      Your timer will execute in
+      <div id="time"></div>
+      <script>
+        let url = new URL(window.location.href);
+        let timer = url.searchParams.get("timer");
+        document.getElementById("time").innerHTML = parseInt(timer);
+      </script>
+      seconds.
+    </div>
   </body>
 </html>

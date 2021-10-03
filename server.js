@@ -4,9 +4,9 @@ const {
   game1_content,
 } = require("./games/game1.js");
 const express = require("express");
-const store = require("./games/post-store");
 const app = express();
 const port = process.env.PORT || "8000";
+app.use(express.static("games"));
 
 app.get("/", (req, res) => {
   res.send(
@@ -35,7 +35,26 @@ app.get("/game3", (req, res) => {
 });
 
 app.get("/game4", (req, res) => {
-  res.sendFile(__dirname + "/games/game4.html");
+  const query = req.query.timer;
+  if (query && parseInt(query) !== NaN) {
+    res.sendFile(__dirname + "/games/timer.html");
+  } else res.sendFile(__dirname + "/games/game4.html");
+});
+
+app.get("/game5", (req, res) => {
+  res.sendFile(__dirname + "/games/game5.html");
+});
+
+app.get("/game5/signup", (req, res) => {
+  res.sendFile(__dirname + "/games/signup.html");
+});
+
+app.get("/game5/confirm", (req, res) => {
+  res.sendFile(__dirname + "/games/confirm.html");
+});
+
+app.get(/game6/, (req, res) => {
+  res.sendFile(__dirname + "/games/game6.html");
 });
 
 app.listen(port, () => {
